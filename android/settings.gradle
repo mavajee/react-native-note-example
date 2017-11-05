@@ -1,0 +1,3 @@
+rootProject.name = 'Renote'
+
+include ':app'
