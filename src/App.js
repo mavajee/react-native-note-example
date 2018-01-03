@@ -1,74 +1,58 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
+import React from "react";
+import thunk from "redux-thunk";
+import { AsyncStorage, View, Text } from "react-native";
+import { Provider } from "react-redux";
+import { applyMiddleware, combineReducers, compose, createStore } from "redux";
+import { autoRehydrate, persistStore } from "redux-persist";
+import { createLogger } from "redux-logger";
 
-import React, { Component } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  TextInput
-} from 'react-native';
+import { noteReducer } from "./reducers";
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
 
-export default class App extends Component<{}> {
-  constructor(props) {
-    super(props)
-    this.state = {
-      text: '123123'
-    }
+const logger = createLogger({ predicate: (getState, action) => __DEV__ });
 
-    this.onChangeText = this.onChangeText.bind(this)
-  }
-  onChangeText(el) {
-    this.setState({
-      text: el
-    })
-  }
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome {this.state.text} to React some!
-          some new tetxt
-        </Text>
-        <TextInput value={this.state.text} onChangeText={this.onChangeText}/>
-        <Text style={styles.instructions}>
-          To get started , edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
-      </View>
-    );
-  }
-}
+export default class App extends React.Component {
+	constructor() {
+		super();
+		this.state = {
+			store: null,
+			isLoading: true,
+		};
+	}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+	componentWillMount() {
+		let reducer = combineReducers({
+			...listReducer,
+			notes: combineReducers({ ...noteReducer })
+		});
+
+		const preloadedState = {};
+
+		let store = createStore(
+			reducer,
+			preloadedState,
+			compose(applyMiddleware(logger, thunk), autoRehydrate({ log: true }))
+		);
+		let persistor = persistStore(store, {
+			storage: AsyncStorage,
+		}, () => this.setState({ isLoading: false }));
+
+		this.setState({ store, persistor });
+	}
+
+	render() {
+		if (this.state.isLoading) {
+			return null;
+		}
+
+		return (
+			<Provider store={this.state.store} persistor={this.state.persistor}>
+				<View>
+					<Text>App.js</Text>
+				</View>
+			</Provider>
+		);
+	}
+};
+
