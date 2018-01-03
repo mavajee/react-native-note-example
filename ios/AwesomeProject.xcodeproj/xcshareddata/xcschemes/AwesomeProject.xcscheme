@@ -43,8 +43,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "RenoteTests.xctest"
-               BlueprintName = "RenoteTests"
+               BuildableName = "Renote.xctest"
+               BlueprintName = "Renote"
                ReferencedContainer = "container:Renote.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -61,8 +61,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "RenoteTests.xctest"
-               BlueprintName = "RenoteTests"
+               BuildableName = "Renote.xctest"
+               BlueprintName = "Renote"
                ReferencedContainer = "container:Renote.xcodeproj">
             </BuildableReference>
          </TestableReference>
