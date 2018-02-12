@@ -1,5 +1,5 @@
-import * as noteReducer from "./note";
+import * as noteReducers from "./note";
 
 export {
-  noteReducer
+  noteReducers
 };
